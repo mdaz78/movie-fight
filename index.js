@@ -1,3 +1,4 @@
+"use strict";
 const autoCompleteConfig = {
   renderOption({ Poster: poster, Title: title, Year: year }) {
     const imgSrc = poster === "N/A" ? "" : poster;

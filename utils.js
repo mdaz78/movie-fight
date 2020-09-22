@@ -1,3 +1,5 @@
+"use strict";
+
 const URL = "http://www.omdbapi.com/?apikey=5d21fc80";
 
 /**

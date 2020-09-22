@@ -1,3 +1,5 @@
+"use strict";
+
 const createAutoComplete = ({
   root,
   renderOption,
