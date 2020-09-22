@@ -1,16 +1,10 @@
-createAutoComplete({
-  root: document.querySelector(".autocomplete"),
-
+const autoCompleteConfig = {
   renderOption({ Poster: poster, Title: title, Year: year }) {
     const imgSrc = poster === "N/A" ? "" : poster;
     return `
       <img src="${imgSrc}"/>
       ${title} (${year})
     `;
-  },
-
-  onOptionSelect(movie) {
-    onMovieSelect(movie);
   },
 
   inputValue({ Title: title }) {
@@ -20,11 +14,44 @@ createAutoComplete({
   async fetchResponse(searchTerm) {
     return await fetchData(searchTerm);
   },
+};
+
+createAutoComplete({
+  ...autoCompleteConfig,
+  root: document.querySelector("#left-autocomplete"),
+  onOptionSelect(movie) {
+    document.querySelector(".tutorial").classList.add("is-hidden");
+    const summaryElement = document.querySelector(".left-summary");
+    onMovieSelect(movie, summaryElement, "LEFT");
+  },
 });
 
-const onMovieSelect = async (movie) => {
+createAutoComplete({
+  ...autoCompleteConfig,
+  root: document.querySelector("#right-autocomplete"),
+  onOptionSelect(movie) {
+    document.querySelector(".tutorial").classList.add("is-hidden");
+    const summaryElement = document.querySelector(".right-summary");
+    onMovieSelect(movie, summaryElement, "RIGHT");
+  },
+});
+
+let leftMovie;
+let rightMovie;
+
+const onMovieSelect = async (movie, summaryElement, side) => {
   const movieData = await fetchData(movie.imdbID, "i");
-  document.querySelector("#summary").innerHTML = movieTemplate(movieData);
+  summaryElement.innerHTML = movieTemplate(movieData);
+
+  if (side === "LEFT") {
+    leftMovie = movieData;
+  } else {
+    rightMovie = movieData;
+  }
+};
+
+const bothMoviesAreSearched = (leftMovie, rightMovie) => {
+  return leftMovie && rightMovie;
 };
 
 const movieTemplate = (movieDetail) => {
