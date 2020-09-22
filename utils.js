@@ -37,3 +37,37 @@ const fetchData = async (searchTerm, paramName = "s") => {
 
   return data;
 };
+
+/**
+ * returns a numeric version of the received strings, removes, $ and ","
+ * from the string
+ * @param {String} str - string to convert to number
+ * @param {Boolean} extractAndSum - boolean value that tells to just
+ *  extract all the numeric value from the given str and sum it up
+ * @returns {Number} value of str converted to number
+ */
+const convertStringToNumber = (str, extractAndSum = false) => {
+  if (extractAndSum) {
+    const strWithoutSpecialChars = extractNumFromStrAndSum(str);
+    return strWithoutSpecialChars;
+  } else {
+    const strWithoutSpecialChars = removeDollarsAndCommasFrom(str);
+    return parseFloat(strWithoutSpecialChars);
+  }
+};
+
+const removeDollarsAndCommasFrom = (str) => {
+  return str.replace(/\$/g, "").replace(/,/g, "");
+};
+
+const extractNumFromStrAndSum = (str) => {
+  return str.split(" ").reduce((prev, word) => {
+    const value = parseFloat(word);
+
+    if (isNaN(value)) {
+      return prev;
+    } else {
+      return prev + value;
+    }
+  }, 0);
+};
